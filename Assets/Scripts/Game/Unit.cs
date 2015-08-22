@@ -8,6 +8,7 @@ public class Unit : MonoBehaviourBase {
 	public int direction;
 
 	public float moveSpeed;
+	public float rotationSpeed;
 	public IRouter router;
 
 	// Use this for initialization
@@ -35,8 +36,24 @@ public class Unit : MonoBehaviourBase {
 			if (nextRoom == null)
 				throw new UnityException("There is no room there!");
 		}
+
 		if (nextRoom != null)
 		{
+			var forward = Dir2Vector(direction);
+
+			if (rotationSpeed > 0) {
+				var forwardInLocal = transform.worldToLocalMatrix.MultiplyVector(forward);
+				var a = Vector3.Angle (forwardInLocal, Vector3.right);
+
+				if (a > Time.deltaTime * rotationSpeed)
+				{
+					transform.Rotate(Vector3.forward, Time.deltaTime * rotationSpeed * (forwardInLocal.y > 0 ? 1 : -1));
+					return;
+				}
+			}
+
+			transform.rotation = Quaternion.AngleAxis(Dir2Deg(direction), Vector3.forward);
+
 			var diff = nextRoom.transform.position - this.transform.position;
 			if (nextRoom != currentRoom && (currentRoom.transform.position - this.transform.position).sqrMagnitude > diff.sqrMagnitude)
 			{
@@ -54,7 +71,7 @@ public class Unit : MonoBehaviourBase {
 			}
 			else
 			{
-				this.transform.position += s * Dir2Vector(direction);
+				this.transform.position += s * forward;
 			}
 		}
 	}
@@ -86,5 +103,10 @@ public class Unit : MonoBehaviourBase {
 		default:
 			throw new System.ArgumentOutOfRangeException();
 		}
+	}
+
+	public static float Dir2Deg(int dir)
+	{
+		return -(dir - 1) * 90;
 	}
 }

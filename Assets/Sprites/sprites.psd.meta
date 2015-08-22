@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 58741b2da6b5744448987d7c1c01f875
-timeCreated: 1440264096
+timeCreated: 1440269398
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -9,10 +9,12 @@ TextureImporter:
     21300004: adventurer
     21300006: cross
     21300008: progress
+    21300010: door
+    21300012: gizmo
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -34,7 +36,7 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: -1
+    filterMode: 1
     aniso: 16
     mipBias: -1
     wrapMode: 1
@@ -103,6 +105,26 @@ TextureImporter:
         height: 95
       alignment: 0
       pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: door
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 560
+        width: 16
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: gizmo
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 650
+        width: 143
+        height: 76
+      alignment: 4
+      pivot: {x: 0, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

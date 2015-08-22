@@ -2,14 +2,13 @@
 using System.Collections;
 
 public class DungeonGenerator : MonoBehaviourBase {
-
-	public int xRadius = 7;
-	public int yRadius = 4;
-
+	
 	public GameObject roomPrefab;
 
 	// Use this for initialization
 	void Awake () {
+		var xRadius = GameManager.Instance.xRadius;
+		var yRadius = GameManager.Instance.yRadius;
 		var map = RoomMap.Instance;
 
 		for (int i = -xRadius; i <= xRadius; i++)
@@ -20,6 +19,8 @@ public class DungeonGenerator : MonoBehaviourBase {
 
 			var room = Instantiate (roomPrefab);
 			room.transform.position = new Vector3(i, j, 0);
+			room.transform.parent = transform;
+			room.name = string.Format("Room ({0},{1})",i,j);
 			map.RegisterRoom(room.GetComponent<Room>(), true);
 		}
 

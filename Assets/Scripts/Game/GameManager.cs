@@ -10,6 +10,9 @@ public class GameManager : Singleton<GameManager> {
 	public int numAdventurers;
 	public GameObject adventurerPrefab;
 
+	public int xRadius = 7;
+	public int yRadius = 4;
+
 	public void GameOver() {
 		gameOver = true;
 
@@ -34,7 +37,6 @@ public class GameManager : Singleton<GameManager> {
 		const int minSpawnDistance = 5;
 
 		var map = RoomMap.Instance;
-		var gen = GetComponent<DungeonGenerator>();
 
 		int x;
 		int y;
@@ -44,8 +46,8 @@ public class GameManager : Singleton<GameManager> {
 
 		do
 		{
-			x = Random.Range(-gen.xRadius, gen.xRadius);
-			y = Random.Range(-gen.yRadius, gen.yRadius);
+			x = Random.Range(-xRadius, xRadius);
+			y = Random.Range(-yRadius, yRadius);
 		} while (map.GetRoomAt(new Vector3(x,y,0)) == null
 		         || Mathf.Abs(playerX - x) + Mathf.Abs(playerY - y) < minSpawnDistance
 		         || map.GetRoomAt(new Vector3(x,y,0)).inhabitants.Count > 0);

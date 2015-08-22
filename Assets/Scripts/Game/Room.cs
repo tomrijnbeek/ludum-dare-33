@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Room : MonoBehaviourBase {
 
+	public GameObject doorPrefab;
+
 	public Room[] connections = new Room[4];
 	public List<Unit> inhabitants = new List<Unit>();
 
@@ -19,8 +21,15 @@ public class Room : MonoBehaviourBase {
 		var invertDir = (direction + 2) % 4;
 		if (this.connections[direction] != null || room.connections[invertDir] != null)
 			throw new UnityException("Can't replace existing connections.");
+
 		this.connections[direction] = room;
 		room.connections[invertDir] = this;
+
+		var door = Instantiate(doorPrefab);
+		door.transform.parent = transform;
+
+		door.transform.localPosition = .5f * Unit.Dir2Vector(direction);
+		door.transform.rotation = Quaternion.AngleAxis(-Unit.Dir2Deg(direction), Vector3.forward);
 	}
 
 	public void Enter(Unit unit)

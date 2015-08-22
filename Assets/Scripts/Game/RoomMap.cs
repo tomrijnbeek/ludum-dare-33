@@ -3,15 +3,12 @@ using System.Collections;
 
 public class RoomMap : Singleton<RoomMap> {
 
-	public int xSize = 15;
-	public int ySize = 9;
-
 	public Room[,] rooms;
 
 	void validateRoomExistance()
 	{
 		if (rooms == null)
-			rooms = new Room[xSize,ySize];
+			rooms = new Room[GameManager.Instance.xRadius * 2 + 1, GameManager.Instance.yRadius * 2 + 1];
 	}
 
 	// Update is called once per frame
@@ -50,9 +47,9 @@ public class RoomMap : Singleton<RoomMap> {
 		if (!connectToAdjacent)
 			return;
 
-		if (y < ySize - 1 && rooms[x,y+1] != null)
+		if (y < rooms.GetLength(1) - 1 && rooms[x,y+1] != null)
 			room.Connect(rooms[x,y+1], 0);
-		if (x < xSize - 1 && rooms[x+1,y] != null)
+		if (x < rooms.GetLength(0) - 1 && rooms[x+1,y] != null)
 			room.Connect(rooms[x+1,y], 1);
 		if (y > 0 && rooms[x,y-1] != null)
 			room.Connect(rooms[x,y-1], 2);
@@ -62,7 +59,7 @@ public class RoomMap : Singleton<RoomMap> {
 
 	public void ShiftCoordinates(ref int x, ref int y)
 	{
-		x += (xSize - 1) / 2;
-		y += (ySize - 1) / 2;
+		x += GameManager.Instance.xRadius;
+		y += GameManager.Instance.yRadius;
 	}
 }
