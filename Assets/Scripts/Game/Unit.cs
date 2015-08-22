@@ -67,7 +67,8 @@ public class Unit : MonoBehaviourBase {
 
 	void OnDestroy()
 	{
-		currentRoom.Exit (this);
+		if (currentRoom != null)
+			currentRoom.Exit (this);
 	}
 
 	public static Vector3 Dir2Vector(int dir)

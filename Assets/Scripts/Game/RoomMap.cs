@@ -60,7 +60,7 @@ public class RoomMap : Singleton<RoomMap> {
 			room.Connect(rooms[x-1,y], 3);
 	}
 
-	private void ShiftCoordinates(ref int x, ref int y)
+	public void ShiftCoordinates(ref int x, ref int y)
 	{
 		x += (xSize - 1) / 2;
 		y += (ySize - 1) / 2;
