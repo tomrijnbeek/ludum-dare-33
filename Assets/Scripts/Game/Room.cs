@@ -9,7 +9,6 @@ public class Room : MonoBehaviourBase {
 	// Use this for initialization
 	void Awake () {
 		map = RoomMap.Instance;
-		map.RegisterRoom(this);
 	}
 	
 	// Update is called once per frame

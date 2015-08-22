@@ -8,11 +8,12 @@ public class RoomMap : Singleton<RoomMap> {
 
 	public Room[,] rooms;
 
-	// Use this for initialization
-	void Awake () {
-		rooms = new Room[xSize,ySize];
+	void validateRoomExistance()
+	{
+		if (rooms == null)
+			rooms = new Room[xSize,ySize];
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 	
@@ -27,6 +28,8 @@ public class RoomMap : Singleton<RoomMap> {
 
 	public Room GetRoomAt(Vector3 position)
 	{
+		validateRoomExistance();
+
 		int x, y;
 		GetCoordinatesAt(position, out x, out y);
 		return rooms[x, y];
@@ -34,6 +37,8 @@ public class RoomMap : Singleton<RoomMap> {
 
 	public void RegisterRoom(Room room, bool connectToAdjacent = false)
 	{
+		validateRoomExistance();
+
 		int x, y;
 		GetCoordinatesAt(room.transform.position, out x, out y);
 
