@@ -12,6 +12,7 @@ public class AIRouter : MonoBehaviourBase, IRouter {
 
 	public bool inChase;
 	public Room lastKnownMonsterPosition;
+	public int lastKnownMonsterDirection;
 	public float timeSinceLastMonsterObservation;
 
 	public float slowMoveSpeed;
@@ -33,6 +34,7 @@ public class AIRouter : MonoBehaviourBase, IRouter {
 		{
 			inChase = false;
 			lastKnownMonsterPosition = null;
+			lastKnownMonsterDirection = -1;
 			me.moveSpeed = slowMoveSpeed;
 		}
 
@@ -48,11 +50,14 @@ public class AIRouter : MonoBehaviourBase, IRouter {
 			if (room.connections[direction] == null)
 				break;
 			room = room.connections[direction];
-			
-			if (room.ContainsUnit("Player"))
+
+			Unit monster;
+
+			if (room.TryGetUnit("Player", out monster))
 			{
 				inChase = true;
 				lastKnownMonsterPosition = room;
+				lastKnownMonsterDirection = monster.direction;
 				timeSinceLastMonsterObservation = 0;
 				me.moveSpeed = fastMoveSpeed;
 			}
@@ -112,9 +117,19 @@ public class AIRouter : MonoBehaviourBase, IRouter {
 					LookInDirection(i);
 			}
 
-			// Didn't find a new monster position except for the current?
+			// Didn't find a new monster position?
 			if (me.currentRoom == lastKnownMonsterPosition)
+			{
 				lastKnownMonsterPosition = null;
+
+				// Well, we may still know in which direction it went.
+				if (lastKnownMonsterDirection >= 0)
+				{
+					var spottedDir = lastKnownMonsterDirection;
+					lastKnownMonsterDirection = -1;
+					return spottedDir;
+				}
+			}
 
 			// We know where the monster is. Chase it!
 			if (lastKnownMonsterPosition != null)
