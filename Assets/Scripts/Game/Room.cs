@@ -35,4 +35,25 @@ public class Room : MonoBehaviourBase {
 		if (!this.inhabitants.Remove(unit))
 			throw new UnityException("You can't leave a room you are not in!");
 	}
+
+	public bool ContainsUnit(string tag)
+	{
+		foreach (var u in inhabitants)
+			if (u.tag == tag)
+				return true;
+		return false;
+	}
+
+	public bool TryGetUnit(string tag, out Unit unit)
+	{
+		foreach (var u in inhabitants)
+			if (u.tag == tag)
+		{
+			unit = u;
+			return true;
+		}
+
+		unit = null;
+		return false;
+	}
 }

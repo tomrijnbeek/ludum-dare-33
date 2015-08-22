@@ -59,12 +59,18 @@ public class Unit : MonoBehaviourBase {
 		}
 	}
 
+	public void TurnAround()
+	{
+		direction = (direction + 2) % 4;
+		nextRoom = nextRoom.connections[direction];
+	}
+
 	void OnDestroy()
 	{
 		currentRoom.Exit (this);
 	}
 
-	Vector3 Dir2Vector(int dir)
+	public static Vector3 Dir2Vector(int dir)
 	{
 		switch (dir)
 		{

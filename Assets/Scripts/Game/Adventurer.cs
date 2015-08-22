@@ -5,8 +5,7 @@ public class Adventurer : MonoBehaviourBase {
 
 	void OnNewRoomEntered(Room newRoom)
 	{
-		foreach (var unit in newRoom.inhabitants)
-			if (unit.tag == "Player")
-				GameManager.Instance.GameOver();
+		if (newRoom.ContainsUnit("Player"))
+			GameManager.Instance.GameOver();
 	}
 }
