@@ -7,5 +7,12 @@ public class Adventurer : MonoBehaviourBase {
 	{
 		if (newRoom.ContainsUnit("Player"))
 			GameManager.Instance.GameOver();
+
+		Unit trapUnit;
+		if (newRoom.TryGetUnit("Trap", out trapUnit))
+		{
+			Destroy (this.gameObject);
+			Destroy (trapUnit.gameObject);
+		}
 	}
 }

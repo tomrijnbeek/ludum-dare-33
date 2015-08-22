@@ -1,12 +1,13 @@
 fileFormatVersion: 2
 guid: 58741b2da6b5744448987d7c1c01f875
-timeCreated: 1440243346
+timeCreated: 1440257644
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: room
     21300002: monster
     21300004: adventurer
+    21300006: cross
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -78,6 +79,16 @@ TextureImporter:
         x: 133
         y: 644
         width: 54
+        height: 54
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cross
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 709
+        width: 53
         height: 54
       alignment: 0
       pivot: {x: .5, y: .5}
