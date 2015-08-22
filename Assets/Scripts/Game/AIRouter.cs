@@ -25,7 +25,7 @@ public class AIRouter : MonoBehaviourBase, IRouter {
 		
 		int dir = -1;
 
-		while (dir == -1 || me.currentRoom.connections[dir] == null || dir == lastDir)
+		while (dir == -1 || me.currentRoom.connections[dir] == null || dir == (lastDir + 2) % 4)
 			// this will fail for disconnected rooms
 			dir = Random.Range(0, me.currentRoom.connections.Length);
 

@@ -3,13 +3,15 @@ using System.Collections;
 
 public class GameManager : Singleton<GameManager> {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public bool gameOver;
+
+	public Unit player;
+
+	public void GameOver() {
+		gameOver = true;
+
+		Destroy (player.gameObject);
+
+		Debug.Log("You lost");
 	}
 }
