@@ -9,7 +9,7 @@ public class RoomMap : Singleton<RoomMap> {
 	public Room[,] rooms;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		rooms = new Room[xSize,ySize];
 	}
 	
@@ -18,11 +18,24 @@ public class RoomMap : Singleton<RoomMap> {
 	
 	}
 
+	public void GetCoordinatesAt(Vector3 position, out int x, out int y)
+	{
+		x = Mathf.RoundToInt(position.x);
+		y = Mathf.RoundToInt(position.y);
+		ShiftCoordinates(ref x, ref y);
+	}
+
+	public Room GetRoomAt(Vector3 position)
+	{
+		int x, y;
+		GetCoordinatesAt(position, out x, out y);
+		return rooms[x, y];
+	}
+
 	public void RegisterRoom(Room room, bool connectToAdjacent = false)
 	{
-		int x = Mathf.RoundToInt(room.transform.position.x);
-		int y = Mathf.RoundToInt(room.transform.position.y);
-		ShiftCoordinates(ref x, ref y);
+		int x, y;
+		GetCoordinatesAt(room.transform.position, out x, out y);
 
 		if (rooms[x,y] != null)
 			throw new UnityException("Only one room per tile is allowed.");

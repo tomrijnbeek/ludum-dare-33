@@ -7,7 +7,7 @@ public class Room : MonoBehaviourBase {
 	RoomMap map;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		map = RoomMap.Instance;
 		map.RegisterRoom(this);
 	}

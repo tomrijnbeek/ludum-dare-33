@@ -1,10 +1,11 @@
 fileFormatVersion: 2
 guid: 58741b2da6b5744448987d7c1c01f875
-timeCreated: 1440235050
+timeCreated: 1440237724
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: room
+    21300002: sprites_0
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -57,6 +58,16 @@ TextureImporter:
         y: 640
         width: 128
         height: 128
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: sprites_0
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 709
+        width: 54
+        height: 54
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
