@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Monster : MonoBehaviourBase {
+
+	public GameObject[] taskPrefabs;
+	public KeyCode[] taskKeys;
 
 	public GameObject trapPrefab;
 
 	Unit me;
 
+	public bool busy;
+
 	void Start()
 	{
 		me = GetComponent<Unit>();
+
+		if (taskPrefabs.Length != taskKeys.Length)
+			Debug.LogWarning("Number of task prefabs and key bindings do not match.");
 	}
 
 	void OnNewRoomEntered(Room newRoom)
@@ -26,23 +33,42 @@ public class Monster : MonoBehaviourBase {
 
 	void Update()
 	{
+		if (busy)
+			return;
+
 		if (me.nextRoom != null)
 		{
 			int? dir;
 			if (me.router != null && (dir = me.router.NextDir()) != null && dir.Value == (me.direction + 2) % 4)
 				me.TurnAround();
 		}
-		else
+		else if (!me.currentRoom.ContainsUnit("Trap"))
 		{
-			if (Input.GetKey(KeyCode.Space) && !me.currentRoom.ContainsUnit("Trap"))
-				SetTrap ();
+			for (int i = 0; i < taskKeys.Length; i++)
+				if (Input.GetKey(taskKeys[i]))
+					StartTask(i);
 		}
 	}
 
-	void SetTrap()
+	void StartTask(int i)
+	{
+		var task = Instantiate(taskPrefabs[i]);
+		task.transform.position = transform.position;
+		task.transform.SetParent(this.transform);
+		busy = true;
+	}
+
+	void FinishTask()
+	{
+		busy = false;
+	}
+
+	void PlaceTrap()
 	{
 		var trap = Instantiate(trapPrefab);
 		trap.transform.position = me.currentRoom.transform.position;
 		trap.transform.SetParent(me.currentRoom.transform);
+
+		FinishTask();
 	}
 }
