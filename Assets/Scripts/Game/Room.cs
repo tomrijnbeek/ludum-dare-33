@@ -1,16 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Room : MonoBehaviourBase {
 
 	public Room[] connections = new Room[4];
-	RoomMap map;
+	public List<Unit> inhabitants = new List<Unit>();
 
-	// Use this for initialization
-	void Awake () {
-		map = RoomMap.Instance;
-	}
-	
 	// Update is called once per frame
 	void Update () {
 		foreach (var conn in connections)
@@ -25,5 +21,18 @@ public class Room : MonoBehaviourBase {
 			throw new UnityException("Can't replace existing connections.");
 		this.connections[direction] = room;
 		room.connections[invertDir] = this;
+	}
+
+	public void Enter(Unit unit)
+	{
+		if (this.inhabitants.Contains(unit))
+			throw new UnityException("You invented cloning.");
+		this.inhabitants.Add (unit);
+	}
+
+	public void Exit(Unit unit)
+	{
+		if (!this.inhabitants.Remove(unit))
+			throw new UnityException("You can't leave a room you are not in!");
 	}
 }

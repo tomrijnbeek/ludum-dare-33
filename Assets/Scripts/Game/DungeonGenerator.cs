@@ -15,6 +15,9 @@ public class DungeonGenerator : MonoBehaviourBase {
 		for (int i = -xRadius; i <= xRadius; i++)
 			for (int j = -yRadius; j <= yRadius; j++)
 		{
+			if (Random.value > .95)
+				continue;
+
 			var room = Instantiate (roomPrefab);
 			room.transform.position = new Vector3(i, j, 0);
 			map.RegisterRoom(room.GetComponent<Room>(), true);

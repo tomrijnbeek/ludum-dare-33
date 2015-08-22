@@ -13,6 +13,7 @@ public class Unit : MonoBehaviourBase {
 	// Use this for initialization
 	void Start () {
 		currentRoom = RoomMap.Instance.GetRoomAt(this.transform.position);
+		currentRoom.Enter(this);
 		this.transform.position = currentRoom.transform.position;
 		router = this.GetComponent<IRouter>();
 	}
@@ -38,7 +39,12 @@ public class Unit : MonoBehaviourBase {
 		{
 			var diff = nextRoom.transform.position - this.transform.position;
 			if (nextRoom != currentRoom && (currentRoom.transform.position - this.transform.position).sqrMagnitude > diff.sqrMagnitude)
+			{
+				currentRoom.Exit (this);
 				currentRoom = nextRoom;
+				currentRoom.Enter(this);
+				this.SendMessage("OnNewRoomEntered", nextRoom, SendMessageOptions.DontRequireReceiver);
+			}
 
 			var s = moveSpeed * Time.deltaTime;
 			if (diff.sqrMagnitude <= s * s)
@@ -51,6 +57,11 @@ public class Unit : MonoBehaviourBase {
 				this.transform.position += s * Dir2Vector(direction);
 			}
 		}
+	}
+
+	void OnDestroy()
+	{
+		currentRoom.Exit (this);
 	}
 
 	Vector3 Dir2Vector(int dir)
