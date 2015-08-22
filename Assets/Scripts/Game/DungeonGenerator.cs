@@ -3,7 +3,7 @@ using System.Collections;
 
 public class DungeonGenerator : MonoBehaviourBase {
 
-	public int xRadius = 9;
+	public int xRadius = 7;
 	public int yRadius = 4;
 
 	public GameObject roomPrefab;
@@ -15,7 +15,7 @@ public class DungeonGenerator : MonoBehaviourBase {
 		for (int i = -xRadius; i <= xRadius; i++)
 			for (int j = -yRadius; j <= yRadius; j++)
 		{
-			if (Random.value > .95)
+			if (Random.value > .95 && (i != 0 || j != 0))
 				continue;
 
 			var room = Instantiate (roomPrefab);

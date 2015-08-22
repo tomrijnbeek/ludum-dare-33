@@ -3,8 +3,8 @@ using System.Collections;
 
 public class RoomMap : Singleton<RoomMap> {
 
-	public int xSize = 21;
-	public int ySize = 11;
+	public int xSize = 15;
+	public int ySize = 9;
 
 	public Room[,] rooms;
 
