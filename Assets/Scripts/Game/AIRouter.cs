@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class AIRouter : MonoBehaviourBase, IRouter {
 
 	public Unit me;
+	public int lastDir;
 	
 	public void Start()
 	{
@@ -15,14 +17,20 @@ public class AIRouter : MonoBehaviourBase, IRouter {
 	
 	}
 
-	public Room NextRoom()
+	public int? NextDir()
 	{
-		Room r = null;
-
-		while (r == null)
-			// this will fail for disconnected rooms
-			r = me.currentRoom.connections[Random.Range(0, me.currentRoom.connections.Length)];
+		// Check for dead ends first
+		if (me.currentRoom.connections.Count (r => r != null) == 1)
+			return (lastDir + 2) % 4;
 		
-		return r;
+		int dir = -1;
+
+		while (dir == -1 || me.currentRoom.connections[dir] == null || dir == lastDir)
+			// this will fail for disconnected rooms
+			dir = Random.Range(0, me.currentRoom.connections.Length);
+
+		lastDir = dir;
+		
+		return dir;
 	}
 }

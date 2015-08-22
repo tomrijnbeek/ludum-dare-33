@@ -50,12 +50,12 @@ public class RoomMap : Singleton<RoomMap> {
 		if (!connectToAdjacent)
 			return;
 
-		if (y > 0 && rooms[x,y-1] != null)
-			room.Connect(rooms[x,y-1], 0);
+		if (y < ySize - 1 && rooms[x,y+1] != null)
+			room.Connect(rooms[x,y+1], 0);
 		if (x < xSize - 1 && rooms[x+1,y] != null)
 			room.Connect(rooms[x+1,y], 1);
-		if (y < ySize - 1 && rooms[x,y+1] != null)
-			room.Connect(rooms[x,y+1], 2);
+		if (y > 0 && rooms[x,y-1] != null)
+			room.Connect(rooms[x,y-1], 2);
 		if (x > 0 && rooms[x-1,y] != null)
 			room.Connect(rooms[x-1,y], 3);
 	}
