@@ -31,6 +31,7 @@ public class GameManager : Singleton<GameManager> {
 
 	public void GameOver() {
 		gameOver = true;
+		Time.timeScale = 0;
 
 		Destroy (player.gameObject);
 		UIManager.Instance.EnableGameOverCanvas();
