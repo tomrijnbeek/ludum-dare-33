@@ -11,7 +11,6 @@ public class Monster : MonoBehaviourBase {
 
 	Unit me;
 
-	public bool busy;
 	TaskDefinition busyWith;
 
 	void Start()
@@ -42,7 +41,7 @@ public class Monster : MonoBehaviourBase {
 	{
 		currentCooldown = Mathf.Max (0, currentCooldown - Time.deltaTime);
 
-		if (busy)
+		if (me.busy)
 			return;
 
 		if (me.nextRoom != null)
@@ -66,7 +65,7 @@ public class Monster : MonoBehaviourBase {
 		go.transform.SetParent(this.transform);
 
 		busyWith = task;
-		busy = true;
+		me.busy = true;
 	}
 
 	void FinishTask()
@@ -78,7 +77,7 @@ public class Monster : MonoBehaviourBase {
 			btn.StartCooldown(busyWith.cooldown);
 
 		busyWith = null;
-		busy = false;
+		me.busy = false;
 	}
 
 	void PlaceTrap()

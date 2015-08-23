@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Unit : MonoBehaviourBase {
 
+	public bool busy;
+
 	public Room currentRoom;
 	public Room nextRoom;
 	public int direction;
@@ -21,6 +23,9 @@ public class Unit : MonoBehaviourBase {
 	
 	// Update is called once per frame
 	void Update () {
+		if (busy)
+			return;
+
 		if (nextRoom == null && router != null)
 		{
 			var newDir = router.NextDir();

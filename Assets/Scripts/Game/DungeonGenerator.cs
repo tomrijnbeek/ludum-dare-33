@@ -21,7 +21,7 @@ public class DungeonGenerator : MonoBehaviourBase {
 
 	void Generate()
 	{
-		const float delay = .01f;
+		//const float delay = .01f;
 
 		var roomsToExpandFrom = new Queue<Room>();
 		var room = CreateRoomAt (0,0);

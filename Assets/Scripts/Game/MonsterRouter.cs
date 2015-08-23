@@ -14,7 +14,7 @@ public class MonsterRouter : MonoBehaviourBase, IRouter {
 
 	public int? NextDir()
 	{
-		if (monster.busy)
+		if (me.busy)
 			return null;
 
 		if ((Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) && me.currentRoom.connections[0] != null)
