@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : Singleton<GameManager> {
 	
@@ -10,7 +10,8 @@ public class GameManager : Singleton<GameManager> {
 	
 	public int adventurersQueued;
 	public float nextSpawnMoment;
-	public GameObject adventurerPrefab;
+	public GameObject[] adventurerPrefabs;
+	public int[] adventurerPrefabThresholds;
 
 	public float timeBetweenSpawns = 10;
 	public int xRadius = 7;
@@ -80,9 +81,22 @@ public class GameManager : Singleton<GameManager> {
 		         || Mathf.Abs(playerX - x) + Mathf.Abs(playerY - y) < minSpawnDistance
 		         || map.GetRoomAt(new Vector3(x,y,0)).inhabitants.Count > 0);
 
-		var adv = Instantiate(adventurerPrefab);
+		var adv = Instantiate(SelectAdventurer());
 		adv.transform.position = new Vector3(x,y,0);
 
 		adventurersQueued--;
+	}
+
+	GameObject SelectAdventurer()
+	{
+		var possibilities = new List<int>();
+
+		for (int i = 0; i < adventurerPrefabs.Length; i++)
+		{
+			if (adventurerPrefabThresholds[i] <= kills)
+				possibilities.Add (i);
+		}
+
+		return adventurerPrefabs[possibilities[Random.Range(0, possibilities.Count)]];
 	}
 }
