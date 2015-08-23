@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Trap : MonoBehaviour {
+public class Decay : MonoBehaviourBase {
 
 	public float lifeTime;
 

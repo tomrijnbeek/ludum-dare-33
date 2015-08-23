@@ -8,4 +8,5 @@ public class TaskDefinition
 	public KeyCode key;
 	public float cooldown;
 	public float lastUse = -float.MaxValue;
+	public int available;
 }

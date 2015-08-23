@@ -4,6 +4,7 @@ public class Monster : MonoBehaviourBase {
 
 	public TaskDefinition[] tasks;
 
+	public int attacksAvailable;
 	public float attackCooldown;
 	public float currentCooldown;
 
@@ -13,7 +14,7 @@ public class Monster : MonoBehaviourBase {
 
 	TaskDefinition busyWith;
 
-	public bool canAttack { get { return currentCooldown <= 0; } }
+	public bool canAttack { get { return currentCooldown <= 0 && attacksAvailable > 0; } }
 
 	void Start()
 	{
@@ -23,19 +24,59 @@ public class Monster : MonoBehaviourBase {
 	void OnNewRoomEntered(Room newRoom)
 	{
 		foreach (var unit in newRoom.inhabitants)
-			if (unit.tag == "Adventurer")
 		{
-			if (!UnitWillDefend(unit, newRoom) && canAttack)
+			if (unit.tag == "Adventurer")
 			{
-				unit.SendMessage("Kill");
-				currentCooldown = attackCooldown;
+				if (!UnitWillDefend(unit, newRoom) && canAttack)
+				{
+					unit.SendMessage("Kill");
+					currentCooldown = attackCooldown;
 
-				ActionButton btn;
-				if (ActionButton.allButtons.TryGetValue(KeyCode.None, out btn))
-					btn.StartCooldown(attackCooldown);
+					ActionButton btn;
+					if (ActionButton.allButtons.TryGetValue(KeyCode.None, out btn))
+					{
+						btn.StartCooldown(attackCooldown);
+						btn.SetUses(this.attacksAvailable);
+					}
+				}
+				else
+					GameManager.Instance.GameOver();
 			}
-			else
-				GameManager.Instance.GameOver();
+			else if (unit.tag == "Chest")
+			{
+				ChestPickup();
+				Destroy(unit.gameObject);
+			}
+		}
+	}
+
+	void ChestPickup()
+	{
+		int i = Random.Range (-1, tasks.Length);
+
+		if (i >= 0)
+		{
+			tasks[i].available++;
+		}
+		else
+		{
+			attacksAvailable++;
+		}
+
+		UpdateButtonCounts();
+	}
+
+	void UpdateButtonCounts()
+	{
+		ActionButton btn;
+
+		if (ActionButton.allButtons.TryGetValue(KeyCode.None, out btn))
+			btn.SetUses(this.attacksAvailable);
+				
+		for (int j = 0; j < tasks.Length; j++)
+		{
+			if (ActionButton.allButtons.TryGetValue(tasks[j].key, out btn))
+				btn.SetUses(tasks[j].available);
 		}
 	}
 
@@ -61,10 +102,10 @@ public class Monster : MonoBehaviourBase {
 			if (me.router != null && (dir = me.router.NextDir()) != null && dir.Value == (me.direction + 2) % 4)
 				me.TurnAround();
 		}
-		else if (!me.currentRoom.ContainsUnit("Trap"))
+		else if (me.currentRoom.inhabitants.Count == 1)	// just me in this room :)
 		{
 			for (int i = 0; i < tasks.Length; i++)
-				if (Input.GetKey(tasks[i].key) && Time.time - tasks[i].lastUse >= tasks[i].cooldown)
+				if (Input.GetKey(tasks[i].key) && Time.time - tasks[i].lastUse >= tasks[i].cooldown && tasks[i].available > 0)
 					StartTask(tasks[i]);
 		}
 	}
@@ -77,6 +118,9 @@ public class Monster : MonoBehaviourBase {
 
 		busyWith = task;
 		me.busy = true;
+
+		task.available--;
+		UpdateButtonCounts();
 	}
 
 	void FinishTask()

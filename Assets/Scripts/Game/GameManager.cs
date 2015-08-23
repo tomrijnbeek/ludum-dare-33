@@ -9,11 +9,13 @@ public class GameManager : Singleton<GameManager> {
 	public Unit player;
 	
 	public int adventurersQueued;
-	public float nextSpawnMoment;
+	public float nextAdventurerSpawn, nextChestSpawn;
 	public GameObject[] adventurerPrefabs;
+	public GameObject chestPrefab;
 	public int[] adventurerPrefabThresholds;
 
-	public float timeBetweenSpawns = 10;
+	public float timeBetweenAdventurers;
+	public float timeBetweenChests;
 	public int xRadius = 7;
 	public int yRadius = 4;
 
@@ -26,7 +28,9 @@ public class GameManager : Singleton<GameManager> {
 			SpawnAdventurer();
 		
 		if (adventurersQueued > 0)
-			nextSpawnMoment = timeBetweenSpawns;
+			nextAdventurerSpawn = timeBetweenAdventurers;
+
+		nextChestSpawn = .5f * timeBetweenChests;
 	}
 
 	public void GameOver() {
@@ -55,12 +59,20 @@ public class GameManager : Singleton<GameManager> {
 			return;
 		}
 
-		nextSpawnMoment = Mathf.Max (0, nextSpawnMoment - Time.deltaTime);
-		if (adventurersQueued > 0 && nextSpawnMoment <= 0)
+		nextAdventurerSpawn = Mathf.Max (0, nextAdventurerSpawn - Time.deltaTime);
+		nextChestSpawn = Mathf.Max (0, nextChestSpawn - Time.deltaTime);
+
+		if (adventurersQueued > 0 && nextAdventurerSpawn <= 0)
 		{
 			for (int i = 0, n = adventurersQueued / 5 + 1; i < n; i++)
 				SpawnAdventurer();
-			nextSpawnMoment = timeBetweenSpawns;
+			nextAdventurerSpawn = timeBetweenAdventurers;
+		}
+
+		if (nextChestSpawn <= 0)
+		{
+			SpawnChest();
+			nextChestSpawn = timeBetweenChests;
 		}
 	}
 
@@ -73,7 +85,7 @@ public class GameManager : Singleton<GameManager> {
 	public void QueueAdventurer()
 	{
 		if (adventurersQueued == 0)
-			nextSpawnMoment = timeBetweenSpawns;
+			nextAdventurerSpawn = timeBetweenAdventurers;
 		adventurersQueued++;
 	}
 
@@ -81,14 +93,28 @@ public class GameManager : Singleton<GameManager> {
 	{
 		const int minSpawnDistance = 5;
 
-		var map = RoomMap.Instance;
+		SpawnSomething(SelectAdventurer(), minSpawnDistance);
 
+		adventurersQueued--;
+	}
+
+	void SpawnChest()
+	{
+		const int minSpawnDistance = 4;
+
+		SpawnSomething(chestPrefab, minSpawnDistance);
+	}
+
+	void SpawnSomething(GameObject prefab, int minSpawnDistance)
+	{
+		var map = RoomMap.Instance;
+		
 		int x;
 		int y;
-
+		
 		int playerX = player.currentRoom != null ? Mathf.RoundToInt(player.currentRoom.transform.position.x) : 0;
 		int playerY = player.currentRoom != null ? Mathf.RoundToInt(player.currentRoom.transform.position.y) : 0;
-
+		
 		do
 		{
 			x = Random.Range(-xRadius, xRadius);
@@ -96,11 +122,9 @@ public class GameManager : Singleton<GameManager> {
 		} while (map.GetRoomAt(new Vector3(x,y,0)) == null
 		         || Mathf.Abs(playerX - x) + Mathf.Abs(playerY - y) < minSpawnDistance
 		         || map.GetRoomAt(new Vector3(x,y,0)).inhabitants.Count > 0);
-
-		var adv = Instantiate(SelectAdventurer());
+		
+		var adv = Instantiate(prefab);
 		adv.transform.position = new Vector3(x,y,0);
-
-		adventurersQueued--;
 	}
 
 	GameObject SelectAdventurer()

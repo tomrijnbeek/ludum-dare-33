@@ -8,9 +8,12 @@ public class ActionButton : MonoBehaviour {
 
 	public KeyCode key;
 	public Text text;
+	public Text amountText;
 	public Image circle;
 
 	public float totalCooldown, cooldownLeft;
+
+	public int uses;
 
 	void Start()
 	{
@@ -30,6 +33,20 @@ public class ActionButton : MonoBehaviour {
 		text.gameObject.SetActive(false);
 		circle.gameObject.SetActive(true);
 		circle.fillAmount = 0;
+	}
+
+	public void SetUses(int uses)
+	{
+		if (uses > this.uses)
+			this.Flash();
+
+		amountText.text = uses.ToString();
+	}
+
+	// TODO: maybe
+	void Flash()
+	{
+
 	}
 	
 	// Update is called once per frame
