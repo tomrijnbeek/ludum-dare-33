@@ -5,6 +5,8 @@ using System.Linq;
 
 public class Adventurer : MonoBehaviourBase, IRouter {
 
+	public static List<Adventurer> all;
+
 	public bool kill;
 
 	public Unit me;
@@ -27,10 +29,21 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 	public int progressCircleHandle;
 	System.Action busyCallback;
 
+	public bool canDefend = true;
+
 	void OnNewRoomEntered(Room newRoom)
 	{
-		if (newRoom.ContainsUnit("Player"))
-			GameManager.Instance.GameOver();
+		Unit u;
+		if (newRoom.TryGetUnit("Player", out u))
+		{
+			if (canDefend || !u.GetComponent<Monster>().canAttack)
+				GameManager.Instance.GameOver();
+			else
+			{
+				Kill ();
+				return;
+			}
+		}
 
 		Unit trapUnit;
 		if (newRoom.TryGetUnit("Trap", out trapUnit))
@@ -104,6 +117,10 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 	
 	public void Start()
 	{
+		if (all == null)
+			all = new List<Adventurer>();
+		all.Add (this);
+
 		me = GetComponent<Unit>();
 		me.moveSpeed = slowMoveSpeed;
 	}
@@ -132,7 +149,7 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 		Debug.DrawLine(transform.position, room.transform.position, Color.magenta);
 	}
 
-	protected virtual void MonsterDetected(Unit monster, Room room)
+	public virtual void MonsterDetected(Unit monster, Room room)
 	{
 		inChase = true;
 		lastKnownMonsterPosition = room;
@@ -215,9 +232,11 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 			
 			// Fall back on old code if we don't know for sure in which direction monster went.
 		}
+
+		var count = me.currentRoom.connections.Count (r => r != null);
 		
 		// Check for dead ends first
-		if (me.currentRoom.connections.Count (r => r != null) == 1)
+		if (count == 1)
 		{
 			for (int i = 0; i < 4; i++)
 				if (me.currentRoom.connections[i] != null)
@@ -225,13 +244,25 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 		}
 		
 		int dir = -1;
+		int tries = 0;
 		
-		while (dir == -1 || me.currentRoom.connections[dir] == null || dir == (lastDir + 2) % 4)
+		while (dir == -1
+		       || me.currentRoom.connections[dir] == null
+		       || dir == (lastDir + 2) % 4
+		       || (!canDefend && tries < 10 && count > 2 && me.currentRoom.connections[dir].ContainsUnit("Player")))
+		{
 			// this will fail for disconnected rooms
 			dir = Random.Range(0, me.currentRoom.connections.Length);
+			tries++;
+		}
 		
 		lastDir = dir;
 		
 		return dir;
+	}
+
+	void OnDestroy()
+	{
+		all.Remove (this);
 	}
 }

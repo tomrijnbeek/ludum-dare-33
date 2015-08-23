@@ -13,6 +13,8 @@ public class Monster : MonoBehaviourBase {
 
 	TaskDefinition busyWith;
 
+	public bool canAttack { get { return currentCooldown <= 0; } }
+
 	void Start()
 	{
 		me = GetComponent<Unit>();
@@ -23,7 +25,8 @@ public class Monster : MonoBehaviourBase {
 		foreach (var unit in newRoom.inhabitants)
 			if (unit.tag == "Adventurer")
 		{
-			if (unit.direction != (me.direction + 2) % 4 && (unit.direction == me.direction || unit.nextRoom != newRoom) && currentCooldown <= 0)
+			Debug.LogFormat("{0} and {1}", !UnitWillDefend(unit, newRoom), canAttack);
+			if (!UnitWillDefend(unit, newRoom) && canAttack)
 			{
 				unit.SendMessage("Kill");
 				currentCooldown = attackCooldown;
@@ -35,6 +38,15 @@ public class Monster : MonoBehaviourBase {
 			else
 				GameManager.Instance.GameOver();
 		}
+	}
+
+	bool UnitWillDefend(Unit unit, Room newRoom)
+	{
+		if (unit.direction == (me.direction + 2) % 4)
+			return false;
+		if (unit.direction == me.direction || unit.nextRoom == newRoom)
+			return unit.GetComponent<Adventurer>().canDefend;
+		return false;
 	}
 
 	void Update()
