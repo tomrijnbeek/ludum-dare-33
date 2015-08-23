@@ -33,12 +33,27 @@ public class GameManager : Singleton<GameManager> {
 		gameOver = true;
 
 		Destroy (player.gameObject);
-
-		Debug.Log("You lost");
+		UIManager.Instance.EnableGameOverCanvas();
 	}
 
 	void Update()
 	{
+		if (gameOver)
+		{
+			if (Input.GetKeyDown(KeyCode.Escape))
+				Application.Quit();
+			else if (Input.anyKeyDown)
+			{
+				if (ActionButton.allButtons != null)
+					ActionButton.allButtons.Clear();
+				if (Adventurer.all != null)
+					Adventurer.all.Clear();
+				Application.LoadLevel(Application.loadedLevel);
+			}
+
+			return;
+		}
+
 		nextSpawnMoment = Mathf.Max (0, nextSpawnMoment - Time.deltaTime);
 		if (adventurersQueued > 0 && nextSpawnMoment <= 0)
 		{

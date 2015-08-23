@@ -25,7 +25,6 @@ public class Monster : MonoBehaviourBase {
 		foreach (var unit in newRoom.inhabitants)
 			if (unit.tag == "Adventurer")
 		{
-			Debug.LogFormat("{0} and {1}", !UnitWillDefend(unit, newRoom), canAttack);
 			if (!UnitWillDefend(unit, newRoom) && canAttack)
 			{
 				unit.SendMessage("Kill");

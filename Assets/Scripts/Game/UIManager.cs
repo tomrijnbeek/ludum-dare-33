@@ -5,7 +5,7 @@ using System.Collections;
 public class UIManager : Singleton<UIManager> {
 
 	public bool tutorialEnabled;
-	public Canvas tutorialCanvas;
+	public Canvas tutorialCanvas, gameOverCanvas;
 
 	// Use this for initialization
 	void Start () {
@@ -26,5 +26,10 @@ public class UIManager : Singleton<UIManager> {
 		Destroy (tutorialCanvas.gameObject);
 		Time.timeScale = 1;
 		tutorialEnabled = false;
+	}
+
+	public void EnableGameOverCanvas()
+	{
+		gameOverCanvas.gameObject.SetActive(true);
 	}
 }
