@@ -6,10 +6,12 @@ public class GameManager : Singleton<GameManager> {
 	public bool gameOver;
 
 	public Unit player;
-
-	public int numAdventurers;
+	
+	public int adventurersQueued;
+	public float nextSpawnMoment;
 	public GameObject adventurerPrefab;
 
+	public float timeBetweenSpawns = 10;
 	public int xRadius = 7;
 	public int yRadius = 4;
 
@@ -23,13 +25,29 @@ public class GameManager : Singleton<GameManager> {
 
 	void Awake()
 	{
-		for (int i = 0; i < numAdventurers; i++)
+		if (adventurersQueued > 0)
 			SpawnAdventurer();
+
+		if (adventurersQueued > 0)
+			nextSpawnMoment = timeBetweenSpawns;
 	}
 
 	void Update()
 	{
+		nextSpawnMoment = Mathf.Max (0, nextSpawnMoment - Time.deltaTime);
+		if (adventurersQueued > 0 && nextSpawnMoment <= 0)
+		{
+			for (int i = 0, n = adventurersQueued / 5 + 1; i < n; i++)
+				SpawnAdventurer();
+			nextSpawnMoment = timeBetweenSpawns;
+		}
+	}
 
+	public void QueueAdventurer()
+	{
+		if (adventurersQueued == 0)
+			nextSpawnMoment = timeBetweenSpawns;
+		adventurersQueued++;
 	}
 
 	void SpawnAdventurer()
@@ -54,5 +72,7 @@ public class GameManager : Singleton<GameManager> {
 
 		var adv = Instantiate(adventurerPrefab);
 		adv.transform.position = new Vector3(x,y,0);
+
+		adventurersQueued--;
 	}
 }

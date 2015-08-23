@@ -29,7 +29,7 @@ public class Monster : MonoBehaviourBase {
 		{
 			if (unit.direction != (me.direction + 2) % 4 && (unit.direction == me.direction || unit.nextRoom != newRoom) && currentCooldown <= 0)
 			{
-				Destroy (unit.gameObject);
+				unit.SendMessage("Kill");
 				currentCooldown = attackCooldown;
 			}
 			else
