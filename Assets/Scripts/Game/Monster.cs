@@ -2,8 +2,7 @@
 
 public class Monster : MonoBehaviourBase {
 
-	public GameObject[] taskPrefabs;
-	public KeyCode[] taskKeys;
+	public TaskDefinition[] tasks;
 
 	public float attackCooldown;
 	public float currentCooldown;
@@ -13,13 +12,11 @@ public class Monster : MonoBehaviourBase {
 	Unit me;
 
 	public bool busy;
+	TaskDefinition busyWith;
 
 	void Start()
 	{
 		me = GetComponent<Unit>();
-
-		if (taskPrefabs.Length != taskKeys.Length)
-			Debug.LogWarning("Number of task prefabs and key bindings do not match.");
 	}
 
 	void OnNewRoomEntered(Room newRoom)
@@ -52,22 +49,31 @@ public class Monster : MonoBehaviourBase {
 		}
 		else if (!me.currentRoom.ContainsUnit("Trap"))
 		{
-			for (int i = 0; i < taskKeys.Length; i++)
-				if (Input.GetKey(taskKeys[i]))
-					StartTask(i);
+			for (int i = 0; i < tasks.Length; i++)
+				if (Input.GetKey(tasks[i].key) && Time.time - tasks[i].lastUse >= tasks[i].cooldown)
+					StartTask(tasks[i]);
 		}
 	}
 
-	void StartTask(int i)
+	void StartTask(TaskDefinition task)
 	{
-		var task = Instantiate(taskPrefabs[i]);
-		task.transform.position = transform.position;
-		task.transform.SetParent(this.transform);
+		var go = Instantiate(task.prefab);
+		go.transform.position = transform.position;
+		go.transform.SetParent(this.transform);
+
+		busyWith = task;
 		busy = true;
 	}
 
 	void FinishTask()
 	{
+		busyWith.lastUse = Time.time;
+
+		ActionButton btn;
+		if (ActionButton.allButtons.TryGetValue(busyWith.key, out btn))
+			btn.StartCooldown(busyWith.cooldown);
+
+		busyWith = null;
 		busy = false;
 	}
 
