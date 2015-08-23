@@ -27,6 +27,7 @@ public class Adventurer : MonoBehaviourBase {
 	void Kill()
 	{
 		Destroy (this.gameObject);
+		GameManager.Instance.AddKill();
 		GameManager.Instance.QueueAdventurer();
 		GameManager.Instance.QueueAdventurer();
 	}

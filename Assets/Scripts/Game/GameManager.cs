@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class GameManager : Singleton<GameManager> {
@@ -14,6 +15,9 @@ public class GameManager : Singleton<GameManager> {
 	public float timeBetweenSpawns = 10;
 	public int xRadius = 7;
 	public int yRadius = 4;
+
+	public int kills;
+	public Text killsLabel;
 
 	public void Awake()
 	{
@@ -41,6 +45,12 @@ public class GameManager : Singleton<GameManager> {
 				SpawnAdventurer();
 			nextSpawnMoment = timeBetweenSpawns;
 		}
+	}
+
+	public void AddKill()
+	{
+		kills++;
+		killsLabel.text = kills.ToString();
 	}
 
 	public void QueueAdventurer()
