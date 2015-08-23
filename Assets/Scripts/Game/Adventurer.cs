@@ -37,11 +37,11 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 
 	void OnNewRoomEntered(Room newRoom)
 	{
-		StopChase ();
-
 		Unit u;
 		if (newRoom.TryGetUnit("Player", out u))
 		{
+			StopChase ();
+
 			var monster = u.GetComponent<Monster>();
 
 			if (monster == null)
