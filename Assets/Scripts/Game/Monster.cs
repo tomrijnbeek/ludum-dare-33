@@ -9,6 +9,7 @@ public class Monster : MonoBehaviourBase {
 	public float currentCooldown;
 
 	public GameObject trapPrefab, decoyPrefab;
+	public float invisibilityTime;
 
 	Unit me;
 
@@ -152,5 +153,13 @@ public class Monster : MonoBehaviourBase {
 		decoy.transform.SetParent(me.currentRoom.transform);
 		
 		FinishTask();
+	}
+
+	void BecomeInvisible()
+	{
+		var inv = gameObject.AddComponent<Invisibility>();
+		inv.lifeTime = invisibilityTime;
+
+		FinishTask ();
 	}
 }

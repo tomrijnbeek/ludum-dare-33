@@ -37,9 +37,20 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 
 	void OnNewRoomEntered(Room newRoom)
 	{
+		Unit trapUnit;
+		if (newRoom.TryGetUnit("Trap", out trapUnit))
+		{
+			OnTrapEncountered(trapUnit);
+			trapUnit.GetComponent<AudioSource>().Play();
+			return;
+		}
+
 		Unit u;
 		if (newRoom.TryGetUnit("Player", out u))
 		{
+			if (u.GetComponent<Invisibility>() != null)
+				return;
+
 			StopChase ();
 
 			var monster = u.GetComponent<Monster>();
@@ -57,13 +68,6 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 				Kill ();
 				return;
 			}
-		}
-
-		Unit trapUnit;
-		if (newRoom.TryGetUnit("Trap", out trapUnit))
-		{
-			OnTrapEncountered(trapUnit);
-			trapUnit.GetComponent<AudioSource>().Play();
 		}
 	}
 

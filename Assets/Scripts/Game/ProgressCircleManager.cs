@@ -9,16 +9,30 @@ public class ProgressCircleManager : Singleton<ProgressCircleManager> {
 	int counter;
 	Dictionary<int, Image> circles = new Dictionary<int, Image>();
 
-	public int MakeCircle(Vector3 worldPosition)
+	public int MakeCircle(Vector3 worldPosition, Color? color = null)
 	{
 		var go = Instantiate(prefab);
 		go.transform.SetParent(this.transform);
 
 		var rt = go.GetComponent<RectTransform>();
 		rt.position = Camera.main.WorldToScreenPoint(worldPosition);
-		circles.Add(counter, go.GetComponent<Image>());
+
+		var image = go.GetComponent<Image>();
+		circles.Add(counter, image);
+		if (color != null)
+			image.color = color.Value;
 
 		return counter++;
+	}
+
+	public void MoveCircle(int handle, Vector3 worldPosition)
+	{
+		circles[handle].GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(worldPosition);
+	}
+
+	public void ColorCircle(int handle, Color color)
+	{
+		circles[handle].color = color;
 	}
 
 	public void UpdateCircle(int handle, float t)
