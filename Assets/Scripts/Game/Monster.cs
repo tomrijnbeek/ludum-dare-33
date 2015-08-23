@@ -7,7 +7,7 @@ public class Monster : MonoBehaviourBase {
 	public float attackCooldown;
 	public float currentCooldown;
 
-	public GameObject trapPrefab;
+	public GameObject trapPrefab, decoyPrefab;
 
 	Unit me;
 
@@ -97,6 +97,15 @@ public class Monster : MonoBehaviourBase {
 		trap.transform.position = me.currentRoom.transform.position;
 		trap.transform.SetParent(me.currentRoom.transform);
 
+		FinishTask();
+	}
+
+	void PlaceDecoy()
+	{
+		var decoy = Instantiate(decoyPrefab);
+		decoy.transform.position = me.currentRoom.transform.position;
+		decoy.transform.SetParent(me.currentRoom.transform);
+		
 		FinishTask();
 	}
 }

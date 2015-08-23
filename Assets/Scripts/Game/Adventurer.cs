@@ -37,10 +37,20 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 
 	void OnNewRoomEntered(Room newRoom)
 	{
+		StopChase ();
+
 		Unit u;
 		if (newRoom.TryGetUnit("Player", out u))
 		{
-			if (canDefend || !u.GetComponent<Monster>().canAttack)
+			var monster = u.GetComponent<Monster>();
+
+			if (monster == null)
+			{
+				Destroy(u.gameObject);
+				return;
+			}
+
+			if (canDefend || !monster.canAttack)
 				GameManager.Instance.GameOver();
 			else
 			{
@@ -100,13 +110,18 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 
 		if (inChase && timeSinceLastMonsterObservation >= chaseCooldownTime)
 		{
-			inChase = false;
-			lastKnownMonsterPosition = null;
-			lastKnownMonsterDirection = -1;
-			me.moveSpeed = slowMoveSpeed;
+			StopChase();
 		}
 		
 		LookInDirection(me.direction);
+	}
+
+	void StopChase()
+	{
+		inChase = false;
+		lastKnownMonsterPosition = null;
+		lastKnownMonsterDirection = -1;
+		me.moveSpeed = slowMoveSpeed;
 	}
 
 	protected virtual void ExtraUpdate() { }

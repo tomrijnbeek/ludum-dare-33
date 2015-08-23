@@ -98,7 +98,7 @@ public class DungeonGenerator : MonoBehaviourBase {
 		{
 			room = map.rooms[i,j];
 
-			if (room == null || Random.value < .05)
+			if (room == null)
 				continue;
 
 			var count = room.connections.Count(r => r != null);
