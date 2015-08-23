@@ -29,6 +29,7 @@ public class Decay : MonoBehaviourBase {
 	}
 
 	void OnDestroy() {
-		ProgressCircleManager.Instance.DeleteCircle(progressBarHandle);
+		if (ProgressCircleManager.Instance != null)
+			ProgressCircleManager.Instance.DeleteCircle(progressBarHandle);
 	}
 }

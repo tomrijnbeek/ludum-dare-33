@@ -36,6 +36,7 @@ public class Invisibility : MonoBehaviourBase {
 	}
 
 	void OnDestroy() {
-		ProgressCircleManager.Instance.DeleteCircle(progressBarHandle);
+		if (ProgressCircleManager.Instance != null)
+			ProgressCircleManager.Instance.DeleteCircle(progressBarHandle);
 	}
 }

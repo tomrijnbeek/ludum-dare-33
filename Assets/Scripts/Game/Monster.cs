@@ -85,9 +85,9 @@ public class Monster : MonoBehaviourBase {
 
 	bool UnitWillDefend(Unit unit, Room newRoom)
 	{
-		if (unit.direction == (me.direction + 2) % 4)
+		if (unit.direction == me.direction)
 			return false;
-		if (unit.direction == me.direction || unit.nextRoom == newRoom)
+		if (unit.direction == (me.direction + 2) % 4 || unit.nextRoom == newRoom)
 			return unit.GetComponent<Adventurer>().canDefend;
 		return false;
 	}
