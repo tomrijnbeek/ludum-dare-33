@@ -5,6 +5,9 @@ public class Monster : MonoBehaviourBase {
 	public GameObject[] taskPrefabs;
 	public KeyCode[] taskKeys;
 
+	public float attackCooldown;
+	public float currentCooldown;
+
 	public GameObject trapPrefab;
 
 	Unit me;
@@ -24,8 +27,11 @@ public class Monster : MonoBehaviourBase {
 		foreach (var unit in newRoom.inhabitants)
 			if (unit.tag == "Adventurer")
 		{
-			if (unit.direction != (GetComponent<Unit>().direction + 2) % 4)
+			if (unit.direction != (me.direction + 2) % 4 && (unit.direction == me.direction || unit.nextRoom != newRoom) && currentCooldown <= 0)
+			{
 				Destroy (unit.gameObject);
+				currentCooldown = attackCooldown;
+			}
 			else
 				GameManager.Instance.GameOver();
 		}
@@ -33,6 +39,8 @@ public class Monster : MonoBehaviourBase {
 
 	void Update()
 	{
+		currentCooldown = Mathf.Max (0, currentCooldown - Time.deltaTime);
+
 		if (busy)
 			return;
 
