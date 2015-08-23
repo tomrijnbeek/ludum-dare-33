@@ -170,7 +170,7 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 			
 			Unit monster;
 			
-			if (room.TryGetUnit("Player", out monster))
+			if (room.TryGetUnit("Player", out monster) && monster.GetComponent<Invisibility>() == null)
 				MonsterDetected(monster, room);
 		}
 		
