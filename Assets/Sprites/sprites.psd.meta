@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 58741b2da6b5744448987d7c1c01f875
-timeCreated: 1440269398
+timeCreated: 1440320512
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -11,6 +11,7 @@ TextureImporter:
     21300008: progress
     21300010: door
     21300012: gizmo
+    21300014: blob
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -125,6 +126,16 @@ TextureImporter:
         height: 76
       alignment: 4
       pivot: {x: 0, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: blob
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 476
+        width: 163
+        height: 168
+      alignment: 0
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
