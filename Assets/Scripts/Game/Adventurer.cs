@@ -63,6 +63,7 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 		if (newRoom.TryGetUnit("Trap", out trapUnit))
 		{
 			OnTrapEncountered(trapUnit);
+			trapUnit.GetComponent<AudioSource>().Play();
 		}
 	}
 

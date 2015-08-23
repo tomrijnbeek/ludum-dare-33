@@ -32,4 +32,9 @@ public class UIManager : Singleton<UIManager> {
 	{
 		gameOverCanvas.gameObject.SetActive(true);
 	}
+
+	public void SetAudioLevel(float f)
+	{
+		AudioListener.volume = f;
+	}
 }

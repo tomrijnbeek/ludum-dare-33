@@ -44,6 +44,7 @@ public class Monster : MonoBehaviourBase {
 			}
 			else if (unit.tag == "Chest")
 			{
+				unit.GetComponent<AudioSource>().Play();
 				ChestPickup();
 				Destroy(unit.gameObject);
 			}
