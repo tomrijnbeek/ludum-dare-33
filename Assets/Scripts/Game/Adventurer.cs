@@ -51,26 +51,30 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 			if (u.GetComponent<Invisibility>() != null)
 				return;
 
+			BattleMonster(u);
 			StopChase ();
-
-			var monster = u.GetComponent<Monster>();
-
-			if (monster == null)
-			{
-				Destroy(u.gameObject);
-				return;
-			}
-
-			if (canDefend || !monster.canAttack)
-				GameManager.Instance.GameOver();
-			else
-			{
-				Kill ();
-				return;
-			}
 		}
 	}
 
+	protected void BattleMonster(Unit unit)
+	{
+		var monster = unit.GetComponent<Monster>();
+
+		if (monster == null)
+		{
+			Destroy(unit.gameObject);
+			return;
+		}
+		
+		if (canDefend || !monster.canAttack)
+			GameManager.Instance.GameOver();
+		else
+		{
+			Kill ();
+			return;
+		}
+	}
+	
 	protected void SetBusyFor(float time, bool showProgressCircle = false, System.Action callback = null)
 	{
 		me.busy = true;

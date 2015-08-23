@@ -37,6 +37,7 @@ public class Monster : MonoBehaviourBase {
 					if (ActionButton.allButtons.TryGetValue(KeyCode.None, out btn))
 					{
 						btn.StartCooldown(attackCooldown);
+						attacksAvailable--;
 						btn.SetUses(this.attacksAvailable);
 					}
 				}
