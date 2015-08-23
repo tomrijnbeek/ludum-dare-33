@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class GameManager : Singleton<GameManager> {
-
+	
 	public bool gameOver;
 
 	public Unit player;
@@ -15,21 +15,21 @@ public class GameManager : Singleton<GameManager> {
 	public int xRadius = 7;
 	public int yRadius = 4;
 
+	public void Awake()
+	{
+		if (adventurersQueued > 0)
+			SpawnAdventurer();
+		
+		if (adventurersQueued > 0)
+			nextSpawnMoment = timeBetweenSpawns;
+	}
+
 	public void GameOver() {
 		gameOver = true;
 
 		Destroy (player.gameObject);
 
 		Debug.Log("You lost");
-	}
-
-	void Awake()
-	{
-		if (adventurersQueued > 0)
-			SpawnAdventurer();
-
-		if (adventurersQueued > 0)
-			nextSpawnMoment = timeBetweenSpawns;
 	}
 
 	void Update()

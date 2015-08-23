@@ -65,4 +65,16 @@ public class Room : MonoBehaviourBase {
 		unit = null;
 		return false;
 	}
+
+	public int? RandomEmptyDirection()
+	{
+		var emptyDirections = new List<int>();
+		for (int i = 0; i < 4; i++)
+			if (connections[i] == null)
+				emptyDirections.Add (i);
+
+		if (emptyDirections.Count == 0)
+			return null;
+		return emptyDirections[Random.Range(0, emptyDirections.Count)];
+	}
 }
