@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 58741b2da6b5744448987d7c1c01f875
-timeCreated: 1440333004
+timeCreated: 1440351001
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -13,6 +13,7 @@ TextureImporter:
     21300012: gizmo
     21300014: blob
     21300016: button
+    21300018: exclamation
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -145,6 +146,16 @@ TextureImporter:
         y: 460
         width: 100
         height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: exclamation
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 496
+        width: 6
+        height: 33
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

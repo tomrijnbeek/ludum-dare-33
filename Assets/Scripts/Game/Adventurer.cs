@@ -33,6 +33,8 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 
 	bool[] directionsLooked;
 
+	public GameObject exclamationPrefab;
+
 	void OnNewRoomEntered(Room newRoom)
 	{
 		Unit u;
@@ -154,6 +156,12 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 	public virtual void MonsterDetected(Unit monster, Room room)
 	{
 		directionsLooked = null;
+
+		if (!inChase)
+		{
+			var ex = Instantiate(exclamationPrefab);
+			ex.transform.SetParent(GetComponentInChildren<UprightSprite>().transform, false);
+		}
 
 		inChase = true;
 		lastKnownMonsterPosition = room;
