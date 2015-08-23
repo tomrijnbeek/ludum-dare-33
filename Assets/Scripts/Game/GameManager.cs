@@ -24,13 +24,15 @@ public class GameManager : Singleton<GameManager> {
 
 	public void Awake()
 	{
-		if (adventurersQueued > 0)
+		adventurersQueued *= 10;
+
+		if (adventurersQueued >= 10)
 			SpawnAdventurer();
 		
 		if (adventurersQueued > 0)
 			nextAdventurerSpawn = timeBetweenAdventurers;
 
-		nextChestSpawn = .5f * timeBetweenChests;
+		nextChestSpawn = .25f * timeBetweenChests;
 	}
 
 	public void GameOver() {
@@ -62,9 +64,9 @@ public class GameManager : Singleton<GameManager> {
 		nextAdventurerSpawn = Mathf.Max (0, nextAdventurerSpawn - Time.deltaTime);
 		nextChestSpawn = Mathf.Max (0, nextChestSpawn - Time.deltaTime);
 
-		if (adventurersQueued > 0 && nextAdventurerSpawn <= 0)
+		if (adventurersQueued >= 10 && nextAdventurerSpawn <= 0)
 		{
-			for (int i = 0, n = adventurersQueued / 5 + 1; i < n; i++)
+			for (int i = 0, n = adventurersQueued / 50 + 1; i < n; i++)
 				SpawnAdventurer();
 			nextAdventurerSpawn = timeBetweenAdventurers;
 		}
@@ -82,11 +84,11 @@ public class GameManager : Singleton<GameManager> {
 		killsLabel.text = kills.ToString();
 	}
 
-	public void QueueAdventurer()
+	public void QueueAdventurers()
 	{
 		if (adventurersQueued == 0)
 			nextAdventurerSpawn = timeBetweenAdventurers;
-		adventurersQueued++;
+		adventurersQueued += 15;
 	}
 
 	void SpawnAdventurer()
@@ -95,7 +97,7 @@ public class GameManager : Singleton<GameManager> {
 
 		SpawnSomething(SelectAdventurer(), minSpawnDistance);
 
-		adventurersQueued--;
+		adventurersQueued -= 10;
 	}
 
 	void SpawnChest()

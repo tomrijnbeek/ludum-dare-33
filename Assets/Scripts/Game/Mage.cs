@@ -9,7 +9,7 @@ public class Mage : Adventurer {
 	{
 		foreach (var adventurer in Adventurer.all)
 		{
-			if (adventurer != this && (adventurer.transform.position - transform.position).sqrMagnitude <= notifyRange * notifyRange)
+			if (!(adventurer is Mage) && (adventurer.transform.position - transform.position).sqrMagnitude <= notifyRange * notifyRange)
 				adventurer.MonsterDetected(monster, room);
 		}
 	}

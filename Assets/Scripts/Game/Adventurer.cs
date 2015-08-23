@@ -139,8 +139,7 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 	{
 		Destroy (this.gameObject);
 		GameManager.Instance.AddKill();
-		GameManager.Instance.QueueAdventurer();
-		GameManager.Instance.QueueAdventurer();
+		GameManager.Instance.QueueAdventurers();
 	}
 	
 	public void Start()
