@@ -24,8 +24,11 @@ public class Decay : MonoBehaviourBase {
 
 		if (timeLeft <= 0)
 		{
-			ProgressCircleManager.Instance.DeleteCircle(progressBarHandle);
 			Destroy (this.gameObject);
 		}
+	}
+
+	void OnDestroy() {
+		ProgressCircleManager.Instance.DeleteCircle(progressBarHandle);
 	}
 }

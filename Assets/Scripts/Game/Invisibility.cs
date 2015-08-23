@@ -30,9 +30,12 @@ public class Invisibility : MonoBehaviourBase {
 		{
 			var sr = GetComponentInChildren<SpriteRenderer>();
 			sr.color = sr.color.WithAlpha(1);
-			ProgressCircleManager.Instance.DeleteCircle(progressBarHandle);
+
 			Destroy (this);
 		}
 	}
 
+	void OnDestroy() {
+		ProgressCircleManager.Instance.DeleteCircle(progressBarHandle);
+	}
 }
