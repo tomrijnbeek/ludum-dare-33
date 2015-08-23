@@ -28,6 +28,10 @@ public class Monster : MonoBehaviourBase {
 			{
 				unit.SendMessage("Kill");
 				currentCooldown = attackCooldown;
+
+				ActionButton btn;
+				if (ActionButton.allButtons.TryGetValue(KeyCode.None, out btn))
+					btn.StartCooldown(attackCooldown);
 			}
 			else
 				GameManager.Instance.GameOver();
