@@ -31,6 +31,8 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 
 	public bool canDefend = true;
 
+	bool[] directionsLooked;
+
 	void OnNewRoomEntered(Room newRoom)
 	{
 		Unit u;
@@ -151,6 +153,8 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 
 	public virtual void MonsterDetected(Unit monster, Room room)
 	{
+		directionsLooked = null;
+
 		inChase = true;
 		lastKnownMonsterPosition = room;
 		lastKnownMonsterDirection = monster.direction;
@@ -158,7 +162,10 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 		me.moveSpeed = fastMoveSpeed;
 
 		if (DirToMonster() == (me.direction + 2) % 4)
+		{
 			me.TurnAround();
+			lastDir = me.direction;
+		}
 	}
 	
 	public int DirToMonster()
@@ -205,11 +212,24 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 	{
 		if (inChase)
 		{
-			// We arrived in the room where we last saw the monster of we lost it earlier during the chase, so we look around.
+			// We arrived in the room where we last saw the monster or we lost it earlier during the chase, so we look around.
 			if (lastKnownMonsterPosition == null || me.currentRoom == lastKnownMonsterPosition)
 			{
+				if (directionsLooked == null)
+				{
+					directionsLooked = new bool[4];
+					directionsLooked[lastDir] = true;
+					directionsLooked[(lastDir + 1) % 4] = me.currentRoom.connections[(lastDir + 1) % 4] == null;
+					directionsLooked[(lastDir + 2) % 4] = true;
+					directionsLooked[(lastDir + 3) % 4] = me.currentRoom.connections[(lastDir + 3) % 4] == null;
+				}
+
 				for (int i = 0; i < 4; i++)
-					LookInDirection(i);
+					if (!directionsLooked[i])
+				{
+					directionsLooked[i] = true;
+					return 4 + i;
+				}
 			}
 			
 			// Didn't find a new monster position?
@@ -228,7 +248,11 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 			
 			// We know where the monster is. Chase it!
 			if (lastKnownMonsterPosition != null)
-				return DirToMonster();
+			{
+				var monsterDir = DirToMonster();
+				lastDir = monsterDir;
+				return monsterDir;
+			}
 			
 			// Fall back on old code if we don't know for sure in which direction monster went.
 		}
@@ -240,7 +264,10 @@ public class Adventurer : MonoBehaviourBase, IRouter {
 		{
 			for (int i = 0; i < 4; i++)
 				if (me.currentRoom.connections[i] != null)
-					return i;
+			{
+				lastDir = i;
+				return i;
+			}
 		}
 		
 		int dir = -1;

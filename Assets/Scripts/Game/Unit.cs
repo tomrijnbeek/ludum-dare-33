@@ -37,7 +37,11 @@ public class Unit : MonoBehaviourBase {
 				return;
 			}
 
-			nextRoom = currentRoom.connections[direction];
+			if (direction < 4)
+				nextRoom = currentRoom.connections[direction];
+			else
+				nextRoom = currentRoom;
+			direction = direction % 4;
 			if (nextRoom == null)
 				throw new UnityException("There is no room there!");
 		}
