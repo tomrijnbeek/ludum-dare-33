@@ -140,7 +140,11 @@ public class AIRouter : MonoBehaviourBase, IRouter {
 
 		// Check for dead ends first
 		if (me.currentRoom.connections.Count (r => r != null) == 1)
-			return (lastDir + 2) % 4;
+		{
+			for (int i = 0; i < 4; i++)
+				if (me.currentRoom.connections[i] != null)
+					return i;
+		}
 		
 		int dir = -1;
 
